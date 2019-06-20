@@ -1,0 +1,1 @@
+# Angular-Nodejs-store-image-path-in-mongodb
