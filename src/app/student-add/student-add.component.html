@@ -1,0 +1,110 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="angForm" novalidate>
+      <div class="form-group">
+        <label class="col-md-4">Name</label>
+        <input type="text" class="form-control" formControlName="s_name" #s_name />
+      </div>
+      <div *ngIf="angForm.controls['s_name'].invalid && (angForm.controls['s_name'].dirty || angForm.controls['s_name'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['s_name'].errors.required">
+          Name is required.
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Email</label>
+        <input type="text" class="form-control" formControlName="s_email" #s_email (change)="emailCheckUnique()" />
+      </div>
+      <div *ngIf="angForm.controls['s_email'].invalid && (angForm.controls['s_email'].dirty || angForm.controls['s_email'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['s_email'].errors.required">
+          E-mail is required.
+        </div>
+        <div *ngIf="angForm.controls['s_email'].errors.email || angForm.controls['s_email'].invalid">
+          Enter Valid E-mail 
+        </div>
+      </div>  
+      <div *ngIf="emailAlredyExist != ''" class="alert alert-danger">
+        {{emailAlredyExist}} 
+      </div>    
+      <div class="form-group">
+        <label class="col-md-4">Phone Number</label>
+        <input type="number" class="form-control" formControlName="s_phone" #s_phone />
+      </div>
+      <div *ngIf="angForm.controls['s_phone'].invalid && (angForm.controls['s_phone'].dirty || angForm.controls['s_phone'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['s_phone'].errors.required">
+          Phone Number is required.
+        </div>
+        <div *ngIf="angForm.controls['s_phone'].errors.max">
+          Maximum 10 number allow
+        </div>
+        <div *ngIf="angForm.controls['s_phone'].errors.min">
+          Valid Phone Number
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Department</label>
+        <select class="form-control" formControlName="s_department" #s_department >
+          <option selected [ngValue]="null">Choose...</option>
+          <option *ngFor="let item of studentDepartment" [value]="item">{{item}}</option>
+        </select>
+      </div>
+      <div *ngIf="angForm.controls['s_department'].invalid && (angForm.controls['s_department'].dirty || angForm.controls['s_department'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['s_department'].errors.required">
+          Department Select.
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Profile Photo</label>
+        <div class="file-upload-wrapper" style="position: relative;">
+          <button class="profile">Upload File</button>
+          <input type="file" class="file-upload profile-file" formControlName="s_profile" #s_profile ng2FileSelect [uploader]="uploader" (change)="uploader.uploadAll()" />
+        </div>
+        <!-- <div class="upload-btn">
+            <input type="file">
+            <button>upload picture</button>
+        </div> -->
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Gender</label>
+        <table class="table">
+            <tbody>
+              <tr>
+                <td style="text-align: right">
+                  <input type="radio" id="male" class="form-check-input" value="male" formControlName="s_gender" #s_gender />
+                  <label for="male">Male</label>
+                </td>
+                <td style="text-align: left">
+                  <input type="radio" id="female" class="form-check-input" value="female" formControlName="s_gender" #s_gender />
+                  <label for="female">Female</label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Hobbie</label>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td *ngFor="let control of hobbiesArray.controls; let i = index">
+                <input class="from-check-input" [formControl]="control" (change)="getSelectedHobbies()" type="checkbox" id="inlinecheckbox{{i}}">
+                <label class="from-check-lable" for="inlinecheckbox{{i}}">{{studentHobbies[i]}}</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="form-control from-check-inline" *ngFor="let control of hobbiesArray.controls; let i = index">
+          <input class="from-check-input" [formControl]="control" (change)="getSelectedHobbies()" type="checkbox" id="inlinecheckbox{{i}}">
+          <label class="from-check-lable" for="inlinecheckbox{{i}}">{{studentHobbies[i]}}</label>
+        </div> -->
+      </div>
+      <div class="alert alert-danger" *ngIf="studentHobbiesError && checkHobbiesTouched()">
+        Atleast choose one
+      </div>
+      <div class="form-group">
+        <button (click)="addStudentInfo(s_name.value, s_email.value, s_phone.value, s_department.value)" 
+        [disabled]="angForm.pristine || angForm.invalid || studentHobbiesError"
+        class="btn btn-primary">Add Student</button>
+      </div>
+    </form>
+  </div>
+</div>
